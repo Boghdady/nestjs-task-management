@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const options = new DocumentBuilder()
-    .setTitle('Task Managment API')
+    .setTitle('Tasks Managment API')
     .setDescription('The tasks API description')
     .setVersion('1.0')
     .addTag('tasks')
