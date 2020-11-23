@@ -7,6 +7,7 @@ import { TaskEntity } from './task.entity';
 
 @EntityRepository(TaskEntity)
 export class TaskRepository extends Repository<TaskEntity> {
+  //==============================(getTasks)====================================================//
   // Useing repository to build a query
   async getTasks(tasksFilterDto: TasksFilterDto): Promise<TaskEntity[]> {
     const { status, search } = tasksFilterDto;
@@ -23,12 +24,11 @@ export class TaskRepository extends Repository<TaskEntity> {
         { search: `%${search}%` },
       );
     }
-
     // 2) Execute the query
     const tasks = await query.getMany();
     return tasks;
   }
-
+  //==============================(createTask)====================================================//
   // 1) Using Entity
   async createTask(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
     const { title, description } = createTaskDto;
