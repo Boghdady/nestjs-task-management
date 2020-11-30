@@ -13,6 +13,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 
@@ -23,11 +24,16 @@ import { TaskStatus } from './task-status.enum';
 import { TaskEntity } from './task.entity';
 import { TasksService } from './tasks.service';
 
+@ApiTags('tasks')
+@ApiBearerAuth()
 @Controller('tasks')
 @UseGuards(AuthGuard())
 export class TasksController {
   constructor(private tasksService: TasksService) {}
+
   @Get()
+  @ApiOkResponse({ description: 'Tasks list has been successfully returned' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   getTasks(
     @Query(ValidationPipe) tasksFilterDto: TasksFilterDto,
     @GetUser() user: User,
@@ -44,6 +50,7 @@ export class TasksController {
   }
 
   @Post()
+  @ApiCreatedResponse({ description: 'Task has been created successfully' })
   @UsePipes(ValidationPipe)
   createTask(
     @Body() createTaskDto: CreateTaskDto,
@@ -53,6 +60,7 @@ export class TasksController {
   }
 
   @Delete(':id')
+  @ApiOkResponse({ description: 'Tasks list has been successfully deleted' })
   deleteTask(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
@@ -61,6 +69,7 @@ export class TasksController {
   }
 
   @Patch(':id/status')
+  @ApiOkResponse({ description: 'Tasks list has been successfully updated' })
   updateTaskStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
